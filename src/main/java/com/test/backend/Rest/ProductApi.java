@@ -29,7 +29,7 @@ public class ProductApi {
     }
 
     @PostMapping("/addProduct")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<String> addProduct(@RequestBody Products product) {
         if (product.getName().trim().isEmpty() || product.getPrice().compareTo(BigDecimal.ZERO) < 0
                 || product.getQuantity() < 0) {
@@ -45,14 +45,14 @@ public class ProductApi {
     }
 
     @GetMapping("getAll")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('User') or hasRole('Admin')")
     public ResponseEntity<List<Products>> getAllProducts() {
         List<Products> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/getById/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('User') or hasRole('Admin')")
     public ResponseEntity<Object> getProductById(@PathVariable long id) {
         Optional<Products> product = productService.getProductById(id);
         return product.<ResponseEntity<Object>>map(ResponseEntity::ok)
@@ -60,7 +60,7 @@ public class ProductApi {
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<String> updateProduct(@PathVariable long id, @RequestBody Products product) {
         if (product.getName().trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El nombre no puede estar vacío.");
@@ -81,7 +81,7 @@ public class ProductApi {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<String> deleteProduct(@PathVariable long id) {
         boolean deleted = productService.deleteProduct(id);
         if (deleted) {
