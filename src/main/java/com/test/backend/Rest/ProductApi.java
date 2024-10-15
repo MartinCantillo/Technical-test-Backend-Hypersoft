@@ -5,10 +5,7 @@ import com.test.backend.Service.ProducS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
@@ -23,7 +20,10 @@ public class ProductApi {
     public ProductApi(ProducS productService) {
         this.productService = productService;
     }
-
+    @GetMapping
+    public String helloWord(){
+        return "Hello World";
+    }
     @PostMapping
     public ResponseEntity<String> addProduct(@RequestBody Products product) {
 
