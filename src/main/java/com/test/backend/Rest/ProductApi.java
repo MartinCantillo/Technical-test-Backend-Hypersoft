@@ -44,7 +44,6 @@ public class ProductApi {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-
         boolean result = productService.addProduct(product);
         if (result) {
             response.put("success", "Producto creado correctamente.");
