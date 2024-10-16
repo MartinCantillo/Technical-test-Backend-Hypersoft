@@ -1,107 +1,90 @@
 # 🛠️ Backend API - Spring Boot
 
-Este proyecto es un **backend API** desarrollado en **Spring Boot**. Permite la gestión de usuarios y productos con autenticación JWT y roles específicos.
+This project is a **backend API** developed in **Spring Boot**. It allows for user and product management with JWT authentication and specific roles.
 
-## 🚀 Características del Proyecto
+## 🚀 Project Features
 
-- **Autenticación** con JWT.
-- **Roles de usuario**: Admin, User.
-- **CRUD de productos**: Agregar, Leer, Actualizar, Eliminar productos.
-- **Base de datos**: MySQL.
-- **Spring Security** para la protección de rutas.
+- **Authentication** with JWT.
+- **User roles**: Admin, User.
+- **Product CRUD**: Add, Read, Update, Delete products.
+- **Database**: MySQL.
+- **Spring Security** for route protection.
 
-## 📝 Endpoints del API
+## 📝 API Endpoints
 
-### 📦 Usuarios
+### 📦 Users
 
-#### Registrar un usuario
+#### Register a user
 - `POST /user/register`
-- Cuerpo de la solicitud:
+- Request body:
     ```json
     {
-      "username": "usuario",
-      "password": "contraseña",
-      "role": "ROLE_USER" // O ROLE_ADMIN
+      "username": "user",
+      "password": "password",
+      "role": "ROLE_USER" // Or ROLE_ADMIN
     }
     ```
-  - **Respuesta**: `User registered successfully`
+  - **Response**: `User registered successfully`
 
-#### Login (Generar JWT)
+#### Login (Generate JWT)
 - `POST /user/login`
-- Cuerpo de la solicitud:
+- Request body:
     ```json
     {
-      "username": "usuario",
-      "password": "contraseña"
+      "username": "user",
+      "password": "password"
     }
     ```
-  - **Respuesta**: JWT token
+  - **Response**: JWT token
 
-### 🛒 Productos
+### 🛒 Products
 
-#### Crear producto (Solo Admin)
+#### Create product (Admin only)
 - `POST /api/addProduct`
-- Cuerpo de la solicitud:
+- Request body:
     ```json
     {
-      "name": "Producto A",
+      "name": "Product A",
       "price": 100.0,
       "quantity": 10
     }
     ```
-  - **Respuesta**: `Producto creado correctamente`
+  - **Response**: `Product created successfully`
 
-#### Obtener todos los productos (User y Admin)
+#### Get all products (User and Admin)
 - `GET /api/getAll`
-  - **Respuesta**: Lista de productos en formato JSON
+  - **Response**: List of products in JSON format
 
-#### Obtener producto por ID (User y Admin)
+#### Get product by ID (User and Admin)
 - `GET /api/getById/{id}`
-  - **Respuesta**: Producto con el ID especificado.
+  - **Response**: Product with the specified ID.
 
-#### Actualizar producto (Solo Admin)
+#### Update product (Admin only)
 - `PUT /api/update/{id}`
-- Cuerpo de la solicitud:
+- Request body:
     ```json
     {
-      "name": "Producto actualizado",
+      "name": "Updated Product",
       "price": 200.0,
       "quantity": 50
     }
     ```
-  - **Respuesta**: `Producto actualizado correctamente`
+  - **Response**: `Product updated successfully`
 
-#### Eliminar producto (Solo Admin)
+#### Delete product (Admin only)
 - `DELETE /api/delete/{id}`
-  - **Respuesta**: `No content` si se elimina correctamente.
+  - **Response**: `No content` if deleted successfully.
 
-## ⚙️ Configuración
+## ⚙️ Configuration
 
-### Base de datos
-El backend se conecta a una base de datos MySQL. Asegúrate de tener MySQL instalado y funcionando.
+### Database
+The backend connects to a MySQL database. Make sure MySQL is installed and running.
 
 ```properties
 spring.application.name=Backend
 spring.datasource.url=jdbc:mysql://localhost:3306/bdcrud
 spring.datasource.username=root
-spring.datasource.password=tu_password
+spring.datasource.password=your_password
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL8Dialect
 spring.jpa.properties.hibernate.format_sql=true
 server.port=8020
-## 🔑 Autenticación JWT
-Este proyecto utiliza JWT para autenticar usuarios. El token JWT se debe incluir en las solicitudes protegidas, como la creación y edición de productos.
-
-## 🛠️ Tecnologías utilizadas
-- **Spring Boot** para la creación del API REST.
-- **Spring Security** para autenticación y autorización.
-- **JWT** para manejar tokens de acceso.
-- **JPA / Hibernate** para la interacción con la base de datos.
-- **MySQL** como base de datos.
-- **JUnit / Mockito** para pruebas unitarias.
-
-## 🚀 Pruebas
-
-### Dependencias de pruebas:
-- **JUnit 5**
-- **Mockito**
-
