@@ -4,6 +4,7 @@ import com.test.backend.Service.CustomUserDetailsService;
 import com.test.backend.Util.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -45,7 +46,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                         .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/user/register", "/user/login").permitAll()
-                        .requestMatchers("/api/getAll", "/api/getById").hasAnyRole("User", "Admin")
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                .requestMatchers("/api/getAll", "/api/getById").hasAnyRole("User", "Admin")
                         .requestMatchers("/api/addProduct", "/api/update/**", "/api/delete/**").hasRole("Admin")
                         .anyRequest().authenticated()
                 )
@@ -53,6 +55,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }

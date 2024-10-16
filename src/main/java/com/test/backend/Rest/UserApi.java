@@ -6,6 +6,8 @@ import com.test.backend.Repository.UserR;
 import com.test.backend.Service.CustomUserDetailsService;
 import com.test.backend.Util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -38,13 +43,20 @@ public class UserApi {
     }
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody User user) {
-        // Encode the user's password
+    public ResponseEntity<Map<String, String>> registerUser(@RequestBody User user) {
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        // Save the user to the database
+
         userRepository.save(user);
-        return "User registered successfully";
+
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "User creado correctamente.");
+        response.put("status", "success");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
 
     @PostMapping("/login")
     public String loginUser(@RequestBody AuthenticationRequestDto authenticationRequest) throws Exception {

@@ -9,8 +9,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api")
@@ -30,19 +33,28 @@ public class ProductApi {
 
     @PostMapping("/addProduct")
     @PreAuthorize("hasRole('Admin')")
-    public ResponseEntity<String> addProduct(@RequestBody Products product) {
+    public ResponseEntity<Map<String, String>> addProduct(@RequestBody Products product) {
+
+        Map<String, String> response = new HashMap<>();
+
+
         if (product.getName().trim().isEmpty() || product.getPrice().compareTo(BigDecimal.ZERO) < 0
                 || product.getQuantity() < 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Por favor verifica .");
+            response.put("error", "Por favor verifica los datos del producto.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
+
 
         boolean result = productService.addProduct(product);
         if (result) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("Producto creado correctamente.");
+            response.put("success", "Producto creado correctamente.");
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el producto.");
+            response.put("error", "Error al crear el producto.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
 
     @GetMapping("getAll")
     @PreAuthorize("hasRole('User') or hasRole('Admin')")
@@ -61,24 +73,32 @@ public class ProductApi {
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('Admin')")
-    public ResponseEntity<String> updateProduct(@PathVariable long id, @RequestBody Products product) {
+    public ResponseEntity<Map<String, String>> updateProduct(@PathVariable long id, @RequestBody Products product) {
+        Map<String, String> response = new HashMap<>();
+
         if (product.getName().trim().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El nombre no puede estar vacío.");
+            response.put("message", "El nombre no puede estar vacío.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         if (product.getPrice().compareTo(BigDecimal.ZERO) < 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El precio no puede ser negativo.");
+            response.put("message", "El precio no puede ser negativo.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         if (product.getQuantity() < 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La cantidad no puede ser negativa.");
+            response.put("message", "La cantidad no puede ser negativa.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         boolean updated = productService.updateProduct(id, product);
         if (updated) {
-            return ResponseEntity.ok("Producto actualizado correctamente.");
+            response.put("message", "Producto actualizado correctamente.");
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado.");
+            response.put("message", "Producto no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
+
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('Admin')")
